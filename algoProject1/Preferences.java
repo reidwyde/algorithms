@@ -19,7 +19,8 @@ public class Preferences {
 
     public Preferences(int numberOfProfessors, int numberOfStudents,
                        ArrayList<ArrayList<Integer>> professors_preference,
-                       ArrayList<ArrayList<Integer>> students_preference) {
+                       ArrayList<ArrayList<Integer>> students_preference)
+    {
         this.numberOfProfessors = numberOfProfessors;
         this.numberOfStudents = numberOfStudents;
         this.professors_preference = professors_preference;
