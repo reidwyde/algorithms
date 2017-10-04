@@ -9,12 +9,12 @@ public class Cost {
     private int costToProfessor;
     private int costToStudent;
 
-    public Cost(int indexOfProfessor, int indexOfStudent, int costToProfessor, int costToStuent) {
+    public Cost(int indexOfProfessor, int indexOfStudent, int costToProfessor, int costToStudent) {
 
         this.indexOfProfessor = indexOfProfessor;
         this.indexOfStudent = indexOfStudent;
         this.costToProfessor = costToProfessor;
-        this.costToStudent = costToStuent;
+        this.costToStudent = costToStudent;
     }
 
     public int getIndexOfProfessor() {
@@ -32,17 +32,20 @@ public class Cost {
     public void setIndexOfStudent(int indexOfStudent) {
         this.indexOfStudent = indexOfStudent;
     }
+
     public int getCostToProfessor() {
         return costToProfessor;
     }
+
     public void setCostToProfessor(int costToProfessor) {
         this.costToProfessor = costToProfessor;
     }
-    public int getCostToStuent() {
+
+    public int getCostToStudent() {
         return costToStudent;
     }
-    public void setCostToStuent(int costToStuent) {
-        this.costToStudent = costToStuent;
-    }
 
+    public void setCostToStudent(int costToStudent) {
+        this.costToStudent = costToStudent;
+    }
 }

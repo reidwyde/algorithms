@@ -5,25 +5,13 @@
  * Class to implement Stable Matching algorithms
  */
 
-import java.awt.image.AreaAveragingScaleFilter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
 
 public class Assignment1 {
 
-    public static void main(String [] args){
-        Assignment1 asn = new Assignment1();
 
-        asn.testNextPerm();
-        asn.testStability();
-        asn.testStableMatchBruteForce();
-        asn.testStableMatchBruteForce2();
-        asn.testGSGivenInputs();
-
-
-    }
 
 
     //Part1: Implement a Brute Force Solution
@@ -128,7 +116,6 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
             numProfsLeft = queueOfProfs.size();
             currentProposer = queueOfProfs.get(numProfsLeft - 1);
             currentProposee = preferences.getProfessors_preference().get(currentProposer).get(profProposalCount.get(currentProposer));
-
             while (studOfGivenProf.get(currentProposer) == -1) {
                 makeSwitch = false;
                 currentProposee = preferences.getProfessors_preference().get(currentProposer).get(profProposalCount.get(currentProposer));
@@ -242,11 +229,9 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
         int prof;
         int numProfs = preferences.getNumberOfProfessors();
         ArrayList<ArrayList<Integer>> studPrefOfGivenProf =  new ArrayList<ArrayList<Integer>>();
-        ArrayList<Integer> inverseProf = new ArrayList<Integer>(Collections.nCopies(numProfs, -1));
-
 
         for (int ii = 0; ii<numProfs; ii++){
-            //inverseProf.clear();
+            ArrayList<Integer> inverseProf = new ArrayList<Integer>(Collections.nCopies(numProfs, -1));
             for(int jj = 0; jj<numProfs; jj++){
                 prof = preferences.getStudents_preference().get(ii).get(jj);
                 rank = jj;
@@ -264,6 +249,7 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
     public static boolean checkStability(ArrayList<Integer> pairing, Preferences preferences){
         preferences = preProcessIndices(preferences);
         for(int profIndex = 0; profIndex < pairing.size(); profIndex++){
+
             int currentProf = profIndex;
             int currentPairedStudent = pairing.get(currentProf);
             int indexOfCurrentPairedStudent = preferences.getProfessors_preference().get(currentProf).indexOf(currentPairedStudent);
@@ -275,18 +261,16 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
             //gives an arraylist of all the students the professor would rather have than their current one.
 
 
-
-
             for (int prefStudentIndex = 0; prefStudentIndex < preferredStudents.size(); prefStudentIndex++){
-
-                currentMatchedProf = pairing.indexOf(preferredStudents.get(prefStudentIndex));
+                int currentPreferredStud = preferredStudents.get(prefStudentIndex);
+                currentMatchedProf = pairing.indexOf(currentPreferredStud);
                 //the professor our preferred student is currently with
-                indexOfCurrentMatchedProf = preferences.getStudents_preference().get(prefStudentIndex).indexOf(currentMatchedProf);
+                indexOfCurrentMatchedProf = preferences.getStudents_preference().get(currentPreferredStud).indexOf(currentMatchedProf);
 
 
                 ArrayList<Integer> preferredProfs =
                        // new ArrayList<Integer>(preferences.getStudents_preference().get(pairing.get(prefStudentIndex)).subList(0, indexOfCurrentMatchedProf));
-                        new ArrayList<Integer>(preferences.getStudents_preference().get(preferredStudents.get(prefStudentIndex)).subList(0, indexOfCurrentMatchedProf));
+                        new ArrayList<Integer>(preferences.getStudents_preference().get(currentPreferredStud).subList(0, indexOfCurrentMatchedProf));
                 //gives an arraylist of all the professors the preferred student would rather have than their current one.
 
 
@@ -363,277 +347,12 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
         return nextPerm;
     }
 
-    public static void testNextPerm(){
-        ArrayList<Integer> testArray = new ArrayList<Integer>();
-        testArray.add(1);
-        testArray.add(2);
-        testArray.add(3);
-        int index = 0;
 
 
-        printList(testArray);
-        while(nextPermutationExists(testArray)) {
-            testArray = getNextPerm(testArray);
-            printList(testArray);
-        }
-    }
 
-    public static void testStability() {
 
-        ArrayList<Integer> prof1Pref = new ArrayList<Integer>();
-        prof1Pref.add(1);
-        prof1Pref.add(2);
-        prof1Pref.add(3);
 
-        ArrayList<Integer> prof2Pref = new ArrayList<Integer>();
-        prof2Pref.add(1);
-        prof2Pref.add(2);
-        prof2Pref.add(3);
 
-        ArrayList<Integer> prof3Pref = new ArrayList<Integer>();
-        prof3Pref.add(1);
-        prof3Pref.add(2);
-        prof3Pref.add(3);
-
-        ArrayList<Integer> stud1Pref = new ArrayList<Integer>();
-        stud1Pref.add(1);
-        stud1Pref.add(2);
-        stud1Pref.add(3);
-
-        ArrayList<Integer> stud2Pref = new ArrayList<Integer>();
-        stud2Pref.add(1);
-        stud2Pref.add(2);
-        stud2Pref.add(3);
-
-        ArrayList<Integer> stud3Pref = new ArrayList<Integer>();
-        stud3Pref.add(1);
-        stud3Pref.add(2);
-        stud3Pref.add(3);
-
-        ArrayList<ArrayList<Integer>> profPref = new ArrayList<ArrayList<Integer>>();
-        profPref.add(prof1Pref);
-        profPref.add(prof2Pref);
-        profPref.add(prof3Pref);
-
-        ArrayList<ArrayList<Integer>> studPref = new ArrayList<ArrayList<Integer>>();
-        studPref.add(stud1Pref);
-        studPref.add(stud2Pref);
-        studPref.add(stud3Pref);
-
-
-        Preferences p1 = new Preferences(3, 3, profPref, studPref);
-        Preferences p2 = new Preferences(3, 3, profPref, studPref);
-        Preferences p3 = new Preferences(3, 3, profPref, studPref);
-        Preferences p4 = new Preferences(3, 3, profPref, studPref);
-        Preferences p5 = new Preferences(3, 3, profPref, studPref);
-        Preferences p6 = new Preferences(3, 3, profPref, studPref);
-
-        ArrayList<Integer> pairing = new ArrayList<Integer>();
-
-        pairing.add(0);
-        pairing.add(1);
-        pairing.add(2);
-
-        printList(pairing);
-        boolean b1 = checkStability(pairing, p1);
-        if (b1) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-        ArrayList<Integer> pairing2 = new ArrayList<Integer>();
-        pairing2 = getNextPerm(pairing);
-        printList(pairing2);
-        boolean b2 = checkStability(pairing2, p2);
-        if (!b2) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-
-        ArrayList<Integer> pairing3 = new ArrayList<Integer>();
-        pairing3 = getNextPerm(pairing2);
-        printList(pairing3);
-        boolean b3 = checkStability(pairing3, p3);
-        if (!b3) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-
-        ArrayList<Integer> pairing4= new ArrayList<Integer>();
-        pairing4 = getNextPerm(pairing3);
-        printList(pairing4);
-        boolean b4= checkStability(pairing4, p4);
-        if (!b4) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-        ArrayList<Integer> pairing5= new ArrayList<Integer>();
-        pairing5 = getNextPerm(pairing4);
-        printList(pairing5);
-        boolean b5= checkStability(pairing5, p5);
-        if (!b5) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-
-        ArrayList<Integer> pairing6= new ArrayList<Integer>();
-        pairing6 = getNextPerm(pairing5);
-        printList(pairing6);
-        boolean b6= checkStability(pairing6, p6);
-        if (!b6) System.out.println("You are a god");
-        else System.out.println("no one will ever love you");
-
-
-    }
-
-
-    public static void testStableMatchBruteForce(){
-        ArrayList<Integer> prof1Pref = new ArrayList<Integer>();
-        prof1Pref.add(3);
-        prof1Pref.add(2);
-        prof1Pref.add(1);
-
-        ArrayList<Integer> prof2Pref = new ArrayList<Integer>();
-        prof2Pref.add(3);
-        prof2Pref.add(2);
-        prof2Pref.add(1);
-
-        ArrayList<Integer> prof3Pref = new ArrayList<Integer>();
-        prof3Pref.add(3);
-        prof3Pref.add(2);
-        prof3Pref.add(1);
-
-        ArrayList<Integer> stud1Pref = new ArrayList<Integer>();
-        stud1Pref.add(3);
-        stud1Pref.add(2);
-        stud1Pref.add(1);
-
-        ArrayList<Integer> stud2Pref = new ArrayList<Integer>();
-        stud2Pref.add(3);
-        stud2Pref.add(2);
-        stud2Pref.add(1);
-
-        ArrayList<Integer> stud3Pref = new ArrayList<Integer>();
-        stud3Pref.add(3);
-        stud3Pref.add(2);
-        stud3Pref.add(1);
-
-        ArrayList<ArrayList<Integer>> profPref = new ArrayList<ArrayList<Integer>>();
-        profPref.add(prof1Pref);
-        profPref.add(prof2Pref);
-        profPref.add(prof3Pref);
-
-        ArrayList<ArrayList<Integer>> studPref = new ArrayList<ArrayList<Integer>>();
-        studPref.add(stud1Pref);
-        studPref.add(stud2Pref);
-        studPref.add(stud3Pref);
-
-
-        Preferences preferences = new Preferences(3, 3, profPref, studPref);
-        ArrayList<Integer> pairing = new ArrayList<Integer>();
-
-        pairing = stableMatchBruteForce(preferences);
-
-        System.out.print("Pairing is: " );
-
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("pairing is stable");
-        }
-
-        else{
-            System.out.println("pairing is not stable");
-        }
-
-
-        pairing = stableMatchGaleShapley(preferences);
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("GS pairing is stable");
-        }
-
-        else{
-            System.out.println("GS pairing is not stable");
-        }
-
-
-
-    }
-
-    public static void testStableMatchBruteForce2(){
-        ArrayList<Integer> prof1Pref = new ArrayList<Integer>();
-        prof1Pref.add(1);
-        prof1Pref.add(2);
-        prof1Pref.add(3);
-
-        ArrayList<Integer> prof2Pref = new ArrayList<Integer>();
-        prof2Pref.add(1);
-        prof2Pref.add(2);
-        prof2Pref.add(3);
-
-        ArrayList<Integer> prof3Pref = new ArrayList<Integer>();
-        prof3Pref.add(1);
-        prof3Pref.add(2);
-        prof3Pref.add(3);
-
-        ArrayList<Integer> stud1Pref = new ArrayList<Integer>();
-        stud1Pref.add(1);
-        stud1Pref.add(2);
-        stud1Pref.add(3);
-
-        ArrayList<Integer> stud2Pref = new ArrayList<Integer>();
-        stud2Pref.add(1);
-        stud2Pref.add(2);
-        stud2Pref.add(3);
-
-        ArrayList<Integer> stud3Pref = new ArrayList<Integer>();
-        stud3Pref.add(1);
-        stud3Pref.add(2);
-        stud3Pref.add(3);
-
-        ArrayList<ArrayList<Integer>> profPref = new ArrayList<ArrayList<Integer>>();
-        profPref.add(prof1Pref);
-        profPref.add(prof2Pref);
-        profPref.add(prof3Pref);
-
-        ArrayList<ArrayList<Integer>> studPref = new ArrayList<ArrayList<Integer>>();
-        studPref.add(stud1Pref);
-        studPref.add(stud2Pref);
-        studPref.add(stud3Pref);
-
-
-        Preferences preferences = new Preferences(3, 3, profPref, studPref);
-        ArrayList<Integer> pairing = new ArrayList<Integer>();
-
-        pairing = stableMatchBruteForce(preferences);
-
-        System.out.print("Pairing is: " );
-
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("pairing is stable");
-        }
-
-        else{
-            System.out.println("pairing is not stable");
-        }
-
-
-        pairing = stableMatchGaleShapley(preferences);
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("GS pairing is stable");
-        }
-
-        else{
-            System.out.println("GS pairing is not stable");
-        }
-
-
-    }
 
     public static void printList(ArrayList<Integer> list){
         System.out.print("[");
@@ -644,121 +363,7 @@ if w accepts, her former match goes back on the queue of men; otherwise, m propo
     }
 
 
-    public static void testGSGivenInputs(){
-    /*
-        4 4
-        4 3 1 2
-        2 1 3 4
-        1 3 4 2
-        4 3 1 2
-        3 2 4 1
-        2 3 1 4
-        3 1 2 4
-        3 2 4 1
-    */
 
-        ArrayList<Integer> prof1Pref = new ArrayList<Integer>();
-        prof1Pref.add(4);
-        prof1Pref.add(3);
-        prof1Pref.add(1);
-        prof1Pref.add(2);
-
-        ArrayList<Integer> prof2Pref = new ArrayList<Integer>();
-        prof2Pref.add(2);
-        prof2Pref.add(1);
-        prof2Pref.add(3);
-        prof2Pref.add(4);
-
-        ArrayList<Integer> prof3Pref = new ArrayList<Integer>();
-        prof3Pref.add(1);
-        prof3Pref.add(3);
-        prof3Pref.add(4);
-        prof3Pref.add(2);
-
-        ArrayList<Integer> prof4Pref = new ArrayList<Integer>();
-        prof4Pref.add(4);
-        prof4Pref.add(3);
-        prof4Pref.add(2);
-        prof4Pref.add(1);
-
-
-        /*
-        3 2 4 1
-        2 3 1 4
-        3 1 2 4
-        3 2 4 1
-
-         */
-
-        ArrayList<Integer> stud1Pref = new ArrayList<Integer>();
-        stud1Pref.add(3);
-        stud1Pref.add(2);
-        stud1Pref.add(4);
-        stud1Pref.add(1);
-
-        ArrayList<Integer> stud2Pref = new ArrayList<Integer>();
-        stud2Pref.add(2);
-        stud2Pref.add(3);
-        stud2Pref.add(1);
-        stud2Pref.add(4);
-
-        ArrayList<Integer> stud3Pref = new ArrayList<Integer>();
-        stud3Pref.add(3);
-        stud3Pref.add(1);
-        stud3Pref.add(2);
-        stud3Pref.add(4);
-
-        ArrayList<Integer> stud4Pref = new ArrayList<Integer>();
-        stud4Pref.add(3);
-        stud4Pref.add(2);
-        stud4Pref.add(4);
-        stud4Pref.add(1);
-
-
-        ArrayList<ArrayList<Integer>> profPref = new ArrayList<ArrayList<Integer>>();
-        profPref.add(prof1Pref);
-        profPref.add(prof2Pref);
-        profPref.add(prof3Pref);
-        profPref.add(prof4Pref);
-
-        ArrayList<ArrayList<Integer>> studPref = new ArrayList<ArrayList<Integer>>();
-        studPref.add(stud1Pref);
-        studPref.add(stud2Pref);
-        studPref.add(stud3Pref);
-        studPref.add(stud4Pref);
-
-
-        Preferences preferences = new Preferences(4, 4, profPref, studPref);
-
-
-        System.out.println("GS Pairing for 4x4: ");
-        ArrayList<Integer> pairing = stableMatchGaleShapley(preferences);
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("pairing is stable");
-        }
-
-        else{
-            System.out.println("pairing is not stable");
-        }
-
-
-        System.out.println("Brute Force for 4x4: ");
-        pairing = stableMatchBruteForce(preferences);
-        printList(pairing);
-
-        if (checkStability(pairing, preferences)){
-            System.out.println("pairing is stable");
-        }
-
-        else{
-            System.out.println("pairing is not stable");
-        }
-
-
-
-    }
 
     public static Preferences preProcessIndices(Preferences preferences){
 
